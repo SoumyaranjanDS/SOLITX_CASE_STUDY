@@ -58,6 +58,15 @@ export default function Day5RateLimiting() {
             </p>
           </div>
         </div>
+
+        <div className="mt-6 pt-6 border-t border-slate-200 dark:border-[#333]">
+          <p className="text-sm text-slate-600 dark:text-slate-400 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-500"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+            <span>
+              Want to see the actual code for these algorithms? <a href="https://blog.algomaster.io/p/rate-limiting-algorithms-explained-with-code" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">Read this excellent technical breakdown by Algomaster</a>.
+            </span>
+          </p>
+        </div>
       </div>
 
       <h2 className="prose-h2">The Decision: In-Memory Fixed Window</h2>
