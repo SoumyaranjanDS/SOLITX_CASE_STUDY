@@ -8,6 +8,7 @@ const NAV_ITEMS = [
   { path: '/day-3-estimation', label: 'Day 3: Capacity Estimation' },
   { path: '/day-4-foundation', label: 'Day 4: Foundation' },
   { path: '/day-5-rate-limiting', label: 'Day 5: Rate Limiting' },
+  { path: '/day-6-database', label: 'Day 6: Database Design' },
 ];
 
 export default function Layout() {
