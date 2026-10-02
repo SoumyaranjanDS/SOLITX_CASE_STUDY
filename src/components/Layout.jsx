@@ -4,8 +4,9 @@ import { Sun, Moon, Menu, X, ArrowRight, ArrowLeft } from 'lucide-react';
 
 const NAV_ITEMS = [
   { path: '/', label: 'Core Idea' },
-  { path: '/requirements', label: 'Requirements' },
-  { path: '/day-3-foundation', label: 'Day 3: Foundation' },
+  { path: '/requirements', label: 'Day 2: Requirements' },
+  { path: '/day-3-estimation', label: 'Day 3: Capacity Estimation' },
+  { path: '/day-4-foundation', label: 'Day 4: Foundation' },
 ];
 
 export default function Layout() {

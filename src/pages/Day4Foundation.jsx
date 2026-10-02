@@ -1,11 +1,11 @@
 import React from 'react';
 
-export default function Day3Foundation() {
+export default function Day4Foundation() {
   return (
     <article className="prose-container">
       <h1 className="prose-h1 flex flex-col gap-2">
         <span className="text-xl text-[#666] dark:text-[#a1a1aa] font-medium uppercase tracking-wider">
-          Day 03
+          Day 04
         </span>
         <span>The Foundation</span>
       </h1>
@@ -132,7 +132,7 @@ res.status(200).json(
       </div>
 
       <p>
-        <strong className="text-emerald-600 dark:text-emerald-400">Objective for Day 4:</strong> Implement an in-memory Rate Limiting mechanism to throttle abusive IP addresses before they reach the controller layer.
+        <strong className="text-emerald-600 dark:text-emerald-400">Objective for Day 5:</strong> Implement an in-memory Rate Limiting mechanism to throttle abusive IP addresses before they reach the controller layer.
       </p>
     </article>
   );
