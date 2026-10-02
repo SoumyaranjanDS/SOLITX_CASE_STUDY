@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+@layer base {
+  body {
+    @apply bg-white text-[#111] antialiased font-sans transition-colors duration-200;
+  }
+  
+  .dark body {
+    @apply bg-[#0a0a0a] text-[#ededed];
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight text-black;
+  }
+
+  .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+    @apply text-white;
+  }
+  
+  p {
+    @apply leading-7 text-[#333] mb-5 text-[15px];
+  }
+
+  .dark p {
+    @apply text-[#a1a1aa];
+  }
+  
+  a {
+    @apply text-blue-600 hover:underline;
+  }
+
+  .dark a {
+    @apply text-blue-400;
+  }
+  
+  hr {
+    @apply border-[#eaeaea] my-8;
+  }
+
+  .dark hr {
+    @apply border-[#27272a];
+  }
+}
+
+/* Custom typography classes for documentation */
+.prose-container {
+  @apply max-w-[700px];
+}
+
+.prose-h1 {
+  @apply text-4xl mb-8 mt-2;
+}
+
+.prose-h2 {
+  @apply text-2xl mb-4 mt-12 border-b border-[#eaeaea] dark:border-[#27272a] pb-2;
+}
+
+.prose-h3 {
+  @apply text-xl mb-4 mt-8;
+}
+
+.prose-blockquote {
+  @apply border-l-4 border-black dark:border-white pl-4 my-6 italic text-[#555] dark:text-[#a1a1aa];
+}
+
+.prose-ul {
+  @apply list-disc list-outside ml-5 mb-5 space-y-2 text-[#333] dark:text-[#a1a1aa] text-[15px];
+}
