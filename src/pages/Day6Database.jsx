@@ -42,6 +42,105 @@ export default function Day6Database() {
         <li><strong className="text-black dark:text-white">Unique Constraints:</strong> We create a compound primary key on the <code>follows</code> table using <code>(follower_id, following_id)</code>. If someone clicks follow 10 times, the database physically rejects the 9 duplicates.</li>
       </ul>
 
+      <div className="my-10">
+        <h3 className="text-lg font-bold text-black dark:text-white mb-4">The SOLITX Schema (Visualized)</h3>
+        <p className="text-sm text-slate-600 dark:text-slate-400 mb-6">
+          Here is exactly how the data connects in our PostgreSQL database using Foreign Keys. We use color coding here to show exactly how data maps across tables. If the User <strong className="text-blue-600 dark:text-blue-400">'alice' (ID: 1a2b)</strong> deletes her account, the <code>ON DELETE CASCADE</code> rule follows her ID across the database and automatically deletes her Post and her Follow record.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 font-mono text-xs">
+          {/* Users Table */}
+          <div className="border border-slate-200 dark:border-[#333] rounded-lg overflow-hidden">
+            <div className="bg-slate-100 dark:bg-[#1a1a1a] p-2 border-b border-slate-200 dark:border-[#333] font-bold text-black dark:text-white">
+              USERS TABLE
+            </div>
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-slate-50 dark:bg-[#111] text-slate-500 border-b border-slate-100 dark:border-[#222]">
+                  <th className="p-2 font-normal">id (PK)</th>
+                  <th className="p-2 font-normal">username</th>
+                </tr>
+              </thead>
+              <tbody className="text-slate-700 dark:text-slate-300">
+                <tr className="border-b border-slate-100 dark:border-[#222]">
+                  <td className="p-2 text-blue-600 dark:text-blue-400 font-bold">1a2b</td>
+                  <td className="p-2">alice</td>
+                </tr>
+                <tr>
+                  <td className="p-2 text-orange-600 dark:text-orange-400 font-bold">3c4d</td>
+                  <td className="p-2">bob</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          {/* Posts Table */}
+          <div className="border border-slate-200 dark:border-[#333] rounded-lg overflow-hidden">
+            <div className="bg-slate-100 dark:bg-[#1a1a1a] p-2 border-b border-slate-200 dark:border-[#333] font-bold text-black dark:text-white">
+              POSTS TABLE
+            </div>
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-slate-50 dark:bg-[#111] text-slate-500 border-b border-slate-100 dark:border-[#222]">
+                  <th className="p-2 font-normal">id (PK)</th>
+                  <th className="p-2 font-normal">user_id (FK)</th>
+                  <th className="p-2 font-normal">content</th>
+                </tr>
+              </thead>
+              <tbody className="text-slate-700 dark:text-slate-300">
+                <tr>
+                  <td className="p-2 font-bold text-purple-600 dark:text-purple-400">9z8y</td>
+                  <td className="p-2 text-blue-600 dark:text-blue-400 font-bold">1a2b <span className="text-slate-400 dark:text-slate-500 font-normal ml-1 text-[10px]">← cascade target</span></td>
+                  <td className="p-2 text-black dark:text-white">Hello world!</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          {/* Follows Table */}
+          <div className="border border-slate-200 dark:border-[#333] rounded-lg overflow-hidden">
+            <div className="bg-slate-100 dark:bg-[#1a1a1a] p-2 border-b border-slate-200 dark:border-[#333] font-bold text-black dark:text-white">
+              FOLLOWS (Junction Table)
+            </div>
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-slate-50 dark:bg-[#111] text-slate-500 border-b border-slate-100 dark:border-[#222]">
+                  <th className="p-2 font-normal">follower_id (FK)</th>
+                  <th className="p-2 font-normal">following_id (FK)</th>
+                </tr>
+              </thead>
+              <tbody className="text-slate-700 dark:text-slate-300">
+                <tr>
+                  <td className="p-2 text-blue-600 dark:text-blue-400 font-bold">1a2b <span className="text-slate-400 dark:text-slate-500 font-normal text-[10px]">Alice</span></td>
+                  <td className="p-2 text-orange-600 dark:text-orange-400 font-bold">3c4d <span className="text-slate-400 dark:text-slate-500 font-normal text-[10px]">Bob</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          {/* Likes Table */}
+          <div className="border border-slate-200 dark:border-[#333] rounded-lg overflow-hidden">
+            <div className="bg-slate-100 dark:bg-[#1a1a1a] p-2 border-b border-slate-200 dark:border-[#333] font-bold text-black dark:text-white">
+              LIKES (Junction Table)
+            </div>
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-slate-50 dark:bg-[#111] text-slate-500 border-b border-slate-100 dark:border-[#222]">
+                  <th className="p-2 font-normal">user_id (FK)</th>
+                  <th className="p-2 font-normal">post_id (FK)</th>
+                </tr>
+              </thead>
+              <tbody className="text-slate-700 dark:text-slate-300">
+                <tr>
+                  <td className="p-2 text-orange-600 dark:text-orange-400 font-bold">3c4d <span className="text-slate-400 dark:text-slate-500 font-normal text-[10px]">Bob</span></td>
+                  <td className="p-2 text-purple-600 dark:text-purple-400 font-bold">9z8y <span className="text-slate-400 dark:text-slate-500 font-normal text-[10px]">Alice's post</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
       <div className="my-8">
         <h3 className="text-lg font-bold text-black dark:text-white mb-4">The Implementation (Raw SQL)</h3>
         <p className="mb-4 text-sm text-slate-600 dark:text-slate-400">
