@@ -84,6 +84,31 @@ export default function Day5RateLimiting() {
         When we eventually scale to multiple servers and introduce <strong>Redis</strong>, we will ditch this basic package. Redis has specialized data structures (like <code>Sorted Sets</code>) and atomic Lua scripts that make executing custom Sliding Window or Token Bucket algorithms incredibly fast across distributed systems. We will build that from scratch when the architecture demands it.
       </p>
 
+      <div className="my-8">
+        <h3 className="text-lg font-bold text-black dark:text-white mb-4">The Implementation (Middleware)</h3>
+        <div className="bg-[#0d1117] rounded-xl overflow-hidden border border-slate-200 dark:border-[#333]">
+          <div className="bg-[#161b22] px-4 py-2 border-b border-[#30363d] flex items-center">
+            <span className="text-xs font-mono text-[#8b949e]">backend/src/middlewares/rateLimiter.js</span>
+          </div>
+          <pre className="p-4 overflow-x-auto text-[13px] leading-relaxed text-[#c9d1d9] font-mono">
+            <code className="block">
+<span className="text-[#ff7b72]">import</span> rateLimit <span className="text-[#ff7b72]">from</span> <span className="text-[#a5d6ff]">"express-rate-limit"</span>;<br/><br/>
+
+<span className="text-[#8b949e]">// Limit repeated requests to public APIs like login/register</span><br/>
+<span className="text-[#ff7b72]">export const</span> authLimiter = <span className="text-[#d2a8ff]">rateLimit</span>({`{`}<br/>
+&nbsp;&nbsp;windowMs: <span className="text-[#79c0ff]">15</span> * <span className="text-[#79c0ff]">60</span> * <span className="text-[#79c0ff]">1000</span>, <span className="text-[#8b949e]">// 15 minutes</span><br/>
+&nbsp;&nbsp;max: <span className="text-[#79c0ff]">5</span>, <span className="text-[#8b949e]">// Limit each IP to 5 requests per window</span><br/>
+&nbsp;&nbsp;standardHeaders: <span className="text-[#79c0ff]">true</span>,<br/>
+&nbsp;&nbsp;legacyHeaders: <span className="text-[#79c0ff]">false</span>,<br/>
+&nbsp;&nbsp;<span className="text-[#d2a8ff]">handler</span>: (req, res, next) =&gt; {`{`}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-[#d2a8ff]">next</span>(<span className="text-[#ff7b72]">new</span> <span className="text-[#f0883e]">AppError</span>(<span className="text-[#79c0ff]">429</span>, <span className="text-[#a5d6ff]">"Too many attempts, try again later"</span>));<br/>
+&nbsp;&nbsp;{`}`},<br/>
+{`}`});
+            </code>
+          </pre>
+        </div>
+      </div>
+
       <h2 className="prose-h2">The Next Problem</h2>
       <p>
         In-memory rate limiting works perfectly for our current Monolith. But, what happens when we eventually scale horizontally and have <em>two</em> Node.js servers behind a Load Balancer?
