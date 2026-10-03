@@ -132,7 +132,7 @@ res.status(200).json(
       </div>
 
       <p>
-        <strong className="text-emerald-600 dark:text-emerald-400">Objective for Day 5:</strong> Implement an in-memory Rate Limiting mechanism to throttle abusive IP addresses before they reach the controller layer.
+        <strong className="text-emerald-600 dark:text-emerald-400">Objective for Day 5:</strong> Implement an in-memory Rate Limiting mechanism (Fixed Window) to throttle abusive IP addresses before they reach the controller layer.
       </p>
     </article>
   );
