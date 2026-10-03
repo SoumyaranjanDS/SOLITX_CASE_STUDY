@@ -6,6 +6,7 @@ import Day3Estimation from './pages/Day3Estimation';
 import Day4Foundation from './pages/Day4Foundation';
 import Day5RateLimiting from './pages/Day5RateLimiting';
 import Day6Database from './pages/Day6Database';
+import Day7Indexing from './pages/Day7Indexing';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="day-4-foundation" element={<Day4Foundation />} />
           <Route path="day-5-rate-limiting" element={<Day5RateLimiting />} />
           <Route path="day-6-database" element={<Day6Database />} />
+          <Route path="day-7-indexing" element={<Day7Indexing />} />
         </Route>
       </Routes>
     </BrowserRouter>
