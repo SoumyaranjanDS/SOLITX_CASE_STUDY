@@ -10,6 +10,8 @@ const NAV_ITEMS = [
   { path: '/day-5-rate-limiting', label: 'Rate Limiting' },
   { path: '/day-6-database', label: 'Relational Schema' },
   { path: '/day-7-indexing', label: 'Database Indexing' },
+  { path: '/day-8-load-testing', label: 'Measure Before Scaling' },
+  { path: '/day-9-connection-pooling', label: 'Connection Pooling' },
 ];
 
 export default function Layout() {

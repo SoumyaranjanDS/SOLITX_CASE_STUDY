@@ -7,6 +7,8 @@ import Day4Foundation from './pages/Day4Foundation';
 import Day5RateLimiting from './pages/Day5RateLimiting';
 import Day6Database from './pages/Day6Database';
 import Day7Indexing from './pages/Day7Indexing';
+import Day8LoadTesting from './pages/Day8LoadTesting';
+import Day9ConnectionPooling from './pages/Day9ConnectionPooling';
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
           <Route path="day-5-rate-limiting" element={<Day5RateLimiting />} />
           <Route path="day-6-database" element={<Day6Database />} />
           <Route path="day-7-indexing" element={<Day7Indexing />} />
+          <Route path="day-8-load-testing" element={<Day8LoadTesting />} />
+          <Route path="day-9-connection-pooling" element={<Day9ConnectionPooling />} />
         </Route>
       </Routes>
     </BrowserRouter>
