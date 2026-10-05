@@ -12,6 +12,13 @@ const NAV_ITEMS = [
   { path: '/day-7-indexing', label: 'Database Indexing' },
   { path: '/day-8-load-testing', label: 'Measure Before Scaling' },
   { path: '/day-9-connection-pooling', label: 'Connection Pooling' },
+  { path: '/day-10-pagination', label: 'Pagination' },
+  { path: '/day-11-api-protection', label: 'Distributed Rate Limiting' },
+  { path: '/day-12-repeated-reads', label: 'Repeated Reads' },
+  { path: '/day-13-redis', label: 'Redis (Cache-Aside)' },
+  { path: '/day-14-cache-invalidation', label: 'Cache Invalidation' },
+  { path: '/day-15-cache-stampede', label: 'Cache Stampede' },
+  { path: '/day-16-distributed-rate-limiting', label: 'Cache Lifecycle' },
 ];
 
 export default function Layout() {
@@ -120,7 +127,7 @@ export default function Layout() {
       )}
 
       {/* Desktop Sidebar */}
-      <aside className="hidden md:block w-64 border-r border-[#eaeaea] dark:border-[#27272a] bg-[#fcfcfc] dark:bg-[#111111] shrink-0 sticky top-0 h-screen overflow-y-auto transition-colors duration-200">
+      <aside className="hidden md:block w-64 border-r border-[#eaeaea] dark:border-[#27272a] bg-[#fcfcfc] dark:bg-[#111111] shrink-0 sticky top-0 h-screen overflow-y-auto transition-colors duration-200 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         <SidebarContent />
       </aside>
 
