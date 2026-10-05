@@ -10,7 +10,6 @@ export default function Day13Redis() {
     setLoading(true);
     const start = performance.now();
     try {
-      // Using 'soumya' which actually exists in the Neon database
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/test/user/soumya`);
       const data = await res.json();
 
