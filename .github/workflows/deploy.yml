@@ -1,22 +1,14 @@
-name: Deploy Case Study UI to Server
+name: Deploy Case Study Frontend
 
 on:
   push:
     branches:
-      - main  # Deploys immediately whenever you push or merge into 'main'
-  
-  # Optional: You can schedule a daily automatic deployment at a specific time (e.g., 9:00 AM UTC)
-  # Uncomment the lines below to enable automated scheduled deployments
-  # schedule:
-  #   - cron: '0 9 * * *'
-  
-  # Allows you to click a button in GitHub to deploy manually whenever you want
+      - main
   workflow_dispatch: 
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -26,18 +18,17 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install Dependencies
-        run: npm install
+      - name: Build React Frontend
+        run: |
+          npm install
+          npm run build
 
-      - name: Build React App
-        run: npm run build
-
-      - name: Deploy to Server via SSH
+      - name: Deploy dist to VPS
         uses: easingthemes/ssh-deploy@main
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
-          ARGS: "-rlgoDzvc -i"
+          ARGS: "-rlgoDzvc -i --delete"
           SOURCE: "dist/"
           REMOTE_HOST: ${{ secrets.SERVER_HOST }}
           REMOTE_USER: ${{ secrets.SERVER_USER }}
-          TARGET: "/var/www/study.soumya.site" # Change this to the folder where your Nginx points
+          TARGET: "/var/www/solitx-case-study/dist"
