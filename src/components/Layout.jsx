@@ -19,6 +19,7 @@ const NAV_ITEMS = [
   { path: '/day-14-cache-invalidation', label: 'Cache Invalidation' },
   { path: '/day-15-cache-stampede', label: 'Cache Stampede' },
   { path: '/day-16-distributed-rate-limiting', label: 'Cache Lifecycle' },
+  { path: '/day-17-oauth-usernames', label: 'OAuth & Custom Usernames' },
 ];
 
 export default function Layout() {

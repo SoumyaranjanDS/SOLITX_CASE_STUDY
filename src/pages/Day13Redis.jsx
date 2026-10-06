@@ -82,8 +82,8 @@ export default function Day13Redis() {
 
             {/* Source Indicator */}
             <div className={`w-full xl:w-64 p-6 rounded-xl border flex flex-col items-center justify-center text-center transition-all shadow-sm ${result.source === 'cache'
-                ? 'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-300 dark:border-emerald-700'
-                : 'bg-orange-50 dark:bg-orange-900/20 border-orange-300 dark:border-orange-700'
+              ? 'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-300 dark:border-emerald-700'
+              : 'bg-orange-50 dark:bg-orange-900/20 border-orange-300 dark:border-orange-700'
               }`}>
               {result.source === 'cache' ? (
                 <>

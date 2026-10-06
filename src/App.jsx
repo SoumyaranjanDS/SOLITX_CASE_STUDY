@@ -16,6 +16,7 @@ import Day13Redis from './pages/Day13Redis';
 import Day14CacheInvalidation from './pages/Day14CacheInvalidation';
 import Day15CacheStampede from './pages/Day15CacheStampede';
 import Day16DistributedRateLimiting from './pages/Day16DistributedRateLimiting';
+import Day17OAuthUsernames from './pages/Day17OAuthUsernames';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
           <Route path="day-14-cache-invalidation" element={<Day14CacheInvalidation />} />
           <Route path="day-15-cache-stampede" element={<Day15CacheStampede />} />
           <Route path="day-16-distributed-rate-limiting" element={<Day16DistributedRateLimiting />} />
+          <Route path="day-17-oauth-usernames" element={<Day17OAuthUsernames />} />
         </Route>
       </Routes>
     </BrowserRouter>
