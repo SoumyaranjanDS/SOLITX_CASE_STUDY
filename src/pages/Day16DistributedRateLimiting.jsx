@@ -12,7 +12,7 @@ export default function Day16DistributedRateLimiting() {
       </h1>
       
       <p className="text-lg font-medium text-slate-800 dark:text-slate-200">
-        In Day 11, we saw that our Rate Limiter was fundamentally broken when scaled horizontally. Because Node servers A, B, and C weren't communicating, a single user could bypass the rate limit by hitting different servers through the Load Balancer. Now that we have Redis, we've solved this.
+        In Day 11, we saw that our Rate Limiter was fundamentally broken when scaled horizontally. Because Node servers A, B, and C weren't communicating, a single user could bypass the rate limit by hitting different servers through the Load Balancer. Now that we have Redis, we've solved this!
       </p>
 
       <div className="bg-emerald-50 dark:bg-emerald-950/20 border-l-4 border-emerald-500 p-6 rounded-r-xl my-8">
