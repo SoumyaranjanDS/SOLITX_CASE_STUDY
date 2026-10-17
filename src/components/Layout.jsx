@@ -21,6 +21,7 @@ const NAV_ITEMS = [
   { path: '/day-16-distributed-rate-limiting', label: 'Cache Lifecycle' },
   { path: '/day-17-oauth-usernames', label: 'OAuth & Custom Usernames' },
   { path: '/day-18-feed-post-lifecycle', label: 'Post Lifecycle & Feed' },
+  { path: '/day-19-server-bottleneck', label: 'One Server Bottleneck' },
 ];
 
 export default function Layout() {

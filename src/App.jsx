@@ -18,6 +18,7 @@ import Day15CacheStampede from './pages/Day15CacheStampede';
 import Day16DistributedRateLimiting from './pages/Day16DistributedRateLimiting';
 import Day17OAuthUsernames from './pages/Day17OAuthUsernames';
 import Day18FeedPostLifecycle from './pages/Day18FeedPostLifecycle';
+import Day19ServerBottleneck from './pages/Day19ServerBottleneck';
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
           <Route path="day-16-distributed-rate-limiting" element={<Day16DistributedRateLimiting />} />
           <Route path="day-17-oauth-usernames" element={<Day17OAuthUsernames />} />
           <Route path="day-18-feed-post-lifecycle" element={<Day18FeedPostLifecycle />} />
+          <Route path="day-19-server-bottleneck" element={<Day19ServerBottleneck />} />
         </Route>
       </Routes>
     </BrowserRouter>
