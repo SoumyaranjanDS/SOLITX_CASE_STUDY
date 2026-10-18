@@ -19,6 +19,7 @@ import Day16DistributedRateLimiting from './pages/Day16DistributedRateLimiting';
 import Day17OAuthUsernames from './pages/Day17OAuthUsernames';
 import Day18FeedPostLifecycle from './pages/Day18FeedPostLifecycle';
 import Day19ServerBottleneck from './pages/Day19ServerBottleneck';
+import Day21ConnectionPooling from './pages/Day21ConnectionPooling';
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
           <Route path="day-17-oauth-usernames" element={<Day17OAuthUsernames />} />
           <Route path="day-18-feed-post-lifecycle" element={<Day18FeedPostLifecycle />} />
           <Route path="day-19-server-bottleneck" element={<Day19ServerBottleneck />} />
+          <Route path="day-21-connection-pooling" element={<Day21ConnectionPooling />} />
         </Route>
       </Routes>
     </BrowserRouter>

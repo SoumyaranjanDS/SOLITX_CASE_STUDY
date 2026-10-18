@@ -22,6 +22,7 @@ const NAV_ITEMS = [
   { path: '/day-17-oauth-usernames', label: 'OAuth & Custom Usernames' },
   { path: '/day-18-feed-post-lifecycle', label: 'Post Lifecycle & Feed' },
   { path: '/day-19-server-bottleneck', label: 'One Server Bottleneck' },
+  { path: '/day-21-connection-pooling', label: 'Connection Pooling Under Scale' },
 ];
 
 export default function Layout() {
