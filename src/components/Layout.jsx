@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import { NavLink, Outlet, useLocation, Link } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 import { 
   Sun, 
   Moon, 
@@ -425,21 +426,35 @@ export default function Layout() {
         </div>
       </div>
 
-      {/* ─── MOBILE DRAWER & BACKDROP OVERLAY ─── */}
-      {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-50 md:hidden flex">
-          {/* Backdrop */}
-          <div 
-            className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
-            onClick={() => setIsMobileMenuOpen(false)}
-          />
+      {/* ─── MOBILE DRAWER & BACKDROP OVERLAY (SLIDE IN / SLIDE OUT) ─── */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <div className="fixed inset-0 z-50 md:hidden flex">
+            {/* Backdrop Fade In / Fade Out */}
+            <motion.div 
+              key="mobile-drawer-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+              className="fixed inset-0 bg-black/60 backdrop-blur-xs"
+              onClick={() => setIsMobileMenuOpen(false)}
+            />
 
-          {/* Drawer Sidebar */}
-          <div className="relative z-10 w-72 max-w-[85vw] h-full shadow-2xl flex flex-col bg-[#f8fafc] dark:bg-[#09090b] border-r border-slate-200 dark:border-slate-800">
-            {renderSidebar(true)}
+            {/* Drawer Sidebar Slide In / Slide Out */}
+            <motion.div 
+              key="mobile-drawer-sidebar"
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', damping: 28, stiffness: 280 }}
+              className="relative z-10 w-72 max-w-[85vw] h-full shadow-2xl flex flex-col bg-[#f8fafc] dark:bg-[#09090b] border-r border-slate-200 dark:border-slate-800"
+            >
+              {renderSidebar(true)}
+            </motion.div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
 
       {/* ─── DESKTOP SIDEBAR ─── */}
       <aside className="hidden md:block w-64 border-r border-slate-200 dark:border-slate-800/80 shrink-0 sticky top-0 h-screen transition-colors duration-200">
