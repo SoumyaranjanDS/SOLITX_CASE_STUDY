@@ -1,18 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
 
 @layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
   body {
-    @apply bg-white text-[#111] antialiased font-sans transition-colors duration-200;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    @apply bg-white text-slate-900 antialiased transition-colors duration-200;
   }
   
   .dark body {
-    @apply bg-[#0a0a0a] text-[#ededed];
+    @apply bg-[#09090b] text-slate-100;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-semibold tracking-tight text-black;
+    @apply font-bold tracking-tight text-slate-900;
   }
 
   .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
@@ -20,28 +26,58 @@
   }
   
   p {
-    @apply leading-7 text-[#333] mb-5 text-[15px];
+    @apply leading-7 text-slate-600 mb-5 text-[15px];
   }
 
   .dark p {
-    @apply text-[#a1a1aa];
+    @apply text-slate-400;
   }
   
   a {
-    @apply text-blue-600 hover:underline;
+    @apply text-purple-600 hover:underline;
   }
 
   .dark a {
-    @apply text-blue-400;
+    @apply text-purple-400;
   }
   
   hr {
-    @apply border-[#eaeaea] my-8;
+    @apply border-slate-200 my-8;
   }
 
   .dark hr {
-    @apply border-[#27272a];
+    @apply border-slate-800;
   }
+
+  code, pre, kbd {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+}
+
+/* 3D Tactile Tab Select Effect */
+.tab-3d-active {
+  background: linear-gradient(180deg, #8B5CF6 0%, #6D28D9 100%);
+  color: #ffffff !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+  border-left: 1px solid rgba(139, 92, 246, 0.5);
+  border-right: 1px solid rgba(109, 40, 217, 0.6);
+  border-bottom: 1px solid #4C1D95;
+  box-shadow: 0 3px 0 #4C1D95, 0 6px 12px -2px rgba(109, 40, 217, 0.35);
+  transform: translateY(-1px);
+}
+
+.tab-3d-active:active {
+  transform: translateY(1.5px);
+  box-shadow: 0 1px 0 #4C1D95, 0 2px 4px rgba(109, 40, 217, 0.2);
+}
+
+.dark .tab-3d-active {
+  background: linear-gradient(180deg, #9333EA 0%, #7C3AED 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.35);
+  border-left: 1px solid rgba(147, 51, 234, 0.4);
+  border-right: 1px solid rgba(124, 58, 237, 0.5);
+  border-bottom: 1px solid #3B0764;
+  box-shadow: 0 3px 0 #3B0764, 0 6px 14px -2px rgba(124, 58, 237, 0.45);
 }
 
 /* Custom typography classes for documentation */
@@ -54,17 +90,25 @@
 }
 
 .prose-h2 {
-  @apply text-2xl mb-4 mt-12 border-b border-[#eaeaea] dark:border-[#27272a] pb-2;
+  @apply text-2xl mb-4 mt-12 border-b border-slate-200 dark:border-slate-800 pb-2;
 }
 
 .prose-h3 {
-  @apply text-xl mb-4 mt-8;
-}
-
-.prose-blockquote {
-  @apply border-l-4 border-black dark:border-white pl-4 my-6 italic text-[#555] dark:text-[#a1a1aa];
+  @apply text-xl mb-3 mt-8;
 }
 
 .prose-ul {
-  @apply list-disc list-outside ml-5 mb-5 space-y-2 text-[#333] dark:text-[#a1a1aa] text-[15px];
+  @apply list-disc list-inside mb-6 space-y-2 text-slate-600 dark:text-slate-400;
+}
+
+.prose-ol {
+  @apply list-decimal list-inside mb-6 space-y-2 text-slate-600 dark:text-slate-400;
+}
+
+.prose-li {
+  @apply text-[15px] leading-relaxed;
+}
+
+.prose-code {
+  @apply bg-slate-100 dark:bg-slate-800/80 px-1.5 py-0.5 rounded text-sm text-pink-600 dark:text-pink-400 border border-slate-200 dark:border-slate-700/60 font-mono;
 }
