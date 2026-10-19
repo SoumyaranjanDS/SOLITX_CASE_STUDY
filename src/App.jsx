@@ -20,6 +20,7 @@ import Day17OAuthUsernames from './pages/Day17OAuthUsernames';
 import Day18FeedPostLifecycle from './pages/Day18FeedPostLifecycle';
 import Day19ServerBottleneck from './pages/Day19ServerBottleneck';
 import Day21ConnectionPooling from './pages/Day21ConnectionPooling';
+import Day22StatelessnessAudit from './pages/Day22StatelessnessAudit';
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
           <Route path="day-18-feed-post-lifecycle" element={<Day18FeedPostLifecycle />} />
           <Route path="day-19-server-bottleneck" element={<Day19ServerBottleneck />} />
           <Route path="day-21-connection-pooling" element={<Day21ConnectionPooling />} />
+          <Route path="day-22-statelessness-audit" element={<Day22StatelessnessAudit />} />
         </Route>
       </Routes>
     </BrowserRouter>
