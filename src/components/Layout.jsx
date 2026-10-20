@@ -9,80 +9,60 @@ import {
   ArrowRight, 
   ArrowLeft,
   Search,
-  Compass,
-  Server,
-  Database,
-  ShieldCheck,
-  Layers,
-  ChevronDown,
-  ChevronRight,
   ExternalLink,
-  Zap,
-  Sparkles
+  ChevronRight
 } from 'lucide-react';
 
-// Streamlined, punchy single-line labels
 const NAVIGATION_SECTIONS = [
   {
     id: 'blueprint',
-    title: 'Blueprint',
-    icon: Compass,
-    badge: 'Specs',
+    title: 'Blueprint & Architecture',
     items: [
       { path: '/', label: 'Core Philosophy', day: null },
-      { path: '/requirements', label: 'Requirements', day: null },
-      { path: '/day-3-estimation', label: 'Capacity Estimation', day: 'D03' },
+      { path: '/requirements', label: 'System Requirements', day: null },
+      { path: '/day-3-estimation', label: 'Capacity Estimation', day: '03' },
     ]
   },
   {
     id: 'monolith',
-    title: 'Phase I: Monolith',
-    icon: Server,
-    badge: 'D4–10',
+    title: 'Phase I: Monolith & Database',
     items: [
-      { path: '/day-4-foundation', label: 'Monolith Setup', day: 'D04' },
-      { path: '/day-5-rate-limiting', label: 'Rate Limiting', day: 'D05' },
-      { path: '/day-6-database', label: 'Database Schema', day: 'D06' },
-      { path: '/day-7-indexing', label: 'Database Indexing', day: 'D07' },
-      { path: '/day-8-load-testing', label: 'Load Testing', day: 'D08' },
-      { path: '/day-9-connection-pooling', label: 'Connection Pooling', day: 'D09' },
-      { path: '/day-10-pagination', label: 'Keyset Pagination', day: 'D10' },
+      { path: '/day-4-foundation', label: 'Monolith Foundation', day: '04' },
+      { path: '/day-5-rate-limiting', label: 'In-Memory Rate Limiting', day: '05' },
+      { path: '/day-6-database', label: 'Database Schema & Design', day: '06' },
+      { path: '/day-7-indexing', label: 'PostgreSQL Indexing', day: '07' },
+      { path: '/day-8-load-testing', label: 'Load Testing & Benchmarks', day: '08' },
+      { path: '/day-9-connection-pooling', label: 'Connection Pooling', day: '09' },
+      { path: '/day-10-pagination', label: 'Keyset & Cursor Pagination', day: '10' },
     ]
   },
   {
     id: 'caching',
-    title: 'Phase II: Caching',
-    icon: Database,
-    badge: 'D11–16',
+    title: 'Phase II: Distributed Caching',
     items: [
-      { path: '/day-11-api-protection', label: 'API Protection', day: 'D11' },
-      { path: '/day-12-repeated-reads', label: 'Repeated Reads', day: 'D12' },
-      { path: '/day-13-redis', label: 'Redis Cache-Aside', day: 'D13' },
-      { path: '/day-14-cache-invalidation', label: 'Cache Invalidation', day: 'D14' },
-      { path: '/day-15-cache-stampede', label: 'Cache Stampede', day: 'D15' },
-      { path: '/day-16-distributed-rate-limiting', label: 'Cache Lifecycles', day: 'D16' },
+      { path: '/day-11-api-protection', label: 'Distributed API Protection', day: '11' },
+      { path: '/day-12-repeated-reads', label: 'Repeated Reads Bottleneck', day: '12' },
+      { path: '/day-13-redis', label: 'Redis Cache-Aside Pattern', day: '13' },
+      { path: '/day-14-cache-invalidation', label: 'Write-Through Invalidation', day: '14' },
+      { path: '/day-15-cache-stampede', label: 'Cache Stampede Prevention', day: '15' },
+      { path: '/day-16-distributed-rate-limiting', label: 'Cache Lifecycles & TTLs', day: '16' },
     ]
   },
   {
     id: 'production',
-    title: 'Phase III: Flows',
-    icon: ShieldCheck,
-    badge: 'D17–18',
+    title: 'Phase III: Production Workflows',
     items: [
-      { path: '/day-17-oauth-usernames', label: 'OAuth & Usernames', day: 'D17' },
-      { path: '/day-18-feed-post-lifecycle', label: 'Post Lifecycle', day: 'D18' },
+      { path: '/day-17-oauth-usernames', label: 'OAuth 2.0 & Custom Handles', day: '17' },
+      { path: '/day-18-feed-post-lifecycle', label: 'Post Lifecycle & Feed Reads', day: '18' },
     ]
   },
   {
     id: 'scale',
-    title: 'Phase IV: Scale',
-    icon: Layers,
-    badge: 'D19–23',
-    highlight: true,
+    title: 'Phase IV: Horizontal Scale',
     items: [
-      { path: '/day-19-server-bottleneck', label: 'Server Bottleneck', day: 'D19' },
-      { path: '/day-21-connection-pooling', label: 'Scale Pooling', day: 'D21' },
-      { path: '/day-22-statelessness-audit', label: 'Statelessness Audit', day: 'D22', isNew: true },
+      { path: '/day-19-server-bottleneck', label: 'Single Server Resource Ceiling', day: '19' },
+      { path: '/day-21-connection-pooling', label: 'Pooled Connections Under Scale', day: '21' },
+      { path: '/day-22-statelessness-audit', label: 'Statelessness & Fault Injection', day: '22' },
     ]
   }
 ];
@@ -91,7 +71,6 @@ export default function Layout() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [collapsedSections, setCollapsedSections] = useState({});
   const location = useLocation();
 
   // Flattened list for Next/Prev pagination navigation
@@ -130,13 +109,6 @@ export default function Layout() {
     setIsDarkMode(!isDarkMode);
   };
 
-  const toggleSection = (id) => {
-    setCollapsedSections(prev => ({
-      ...prev,
-      [id]: !prev[id]
-    }));
-  };
-
   // Figure out Pagination (Next / Prev pages)
   const normalizedPath = location.pathname.endsWith('/') && location.pathname.length > 1 
     ? location.pathname.slice(0, -1) 
@@ -166,29 +138,24 @@ export default function Layout() {
   }, [searchQuery]);
 
   const renderSidebar = (isMobile = false) => (
-    <div className="flex flex-col h-full bg-[#f8fafc] dark:bg-[#09090b] text-slate-800 dark:text-slate-200 select-none">
+    <div className="flex flex-col h-full bg-[#fafafa] dark:bg-[#0c0c0e] text-zinc-900 dark:text-zinc-100 select-none">
       {/* ─── BRAND HEADER ─── */}
-      <div className="p-3.5 border-b border-slate-200 dark:border-slate-800/80 shrink-0">
+      <div className="p-4 border-b border-zinc-200/80 dark:border-zinc-800/80 shrink-0">
         <div className="flex items-center justify-between">
           <Link 
             to="/" 
             onClick={() => isMobile && setIsMobileMenuOpen(false)}
-            className="flex items-center gap-2 group no-underline"
+            className="flex items-center gap-2.5 group no-underline"
           >
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-[#7C3AED] to-purple-500 flex items-center justify-center text-white shadow-sm shadow-purple-500/20 group-hover:scale-105 transition-transform">
-              <Zap size={15} className="fill-white" />
+            <div className="w-6 h-6 rounded-md bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 flex items-center justify-center font-bold text-xs tracking-tighter">
+              S
             </div>
             <div>
-              <div className="flex items-center gap-1.5 leading-none">
-                <span className="font-extrabold text-sm tracking-tight text-slate-900 dark:text-white">
-                  SOLITX
-                </span>
-                <span className="text-[9px] font-bold uppercase tracking-wider px-1 py-0.5 rounded bg-purple-100 text-[#7C3AED] dark:bg-purple-950/60 dark:text-purple-300 border border-purple-500/20">
-                  Case Study
-                </span>
+              <div className="font-semibold text-sm tracking-tight text-zinc-900 dark:text-white leading-tight">
+                SOLITX
               </div>
-              <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
-                78-Day Architecture
+              <div className="text-[11px] font-normal text-zinc-500 dark:text-zinc-400">
+                Architecture Journey
               </div>
             </div>
           </Link>
@@ -196,192 +163,154 @@ export default function Layout() {
           <div className="flex items-center gap-1">
             <button
               onClick={toggleTheme}
-              className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 transition-colors cursor-pointer"
+              className="p-1.5 rounded-md hover:bg-zinc-200/70 dark:hover:bg-zinc-800 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors cursor-pointer"
               aria-label="Toggle theme"
             >
-              {isDarkMode ? <Sun size={14} /> : <Moon size={14} />}
+              {isDarkMode ? <Sun size={15} /> : <Moon size={15} />}
             </button>
             {isMobile && (
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 transition-colors cursor-pointer"
+                className="p-1.5 rounded-md hover:bg-zinc-200/70 dark:hover:bg-zinc-800 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors cursor-pointer"
                 aria-label="Close menu"
               >
-                <X size={16} />
+                <X size={17} />
               </button>
             )}
           </div>
         </div>
 
-        {/* ─── SEARCH / QUICK FILTER BAR ─── */}
-        <div className="mt-2.5 relative">
-          <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+        {/* ─── SEARCH INPUT ─── */}
+        <div className="mt-3 relative">
+          <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search chapters..."
-            className="w-full text-xs pl-8 pr-7 py-1.5 rounded-lg bg-white dark:bg-[#121216] border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-[#7C3AED] dark:focus:border-purple-500 transition-all font-sans"
+            placeholder="Search documentation..."
+            className="w-full text-[13px] font-normal pl-8 pr-8 py-1.5 rounded-md bg-white dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-400 dark:focus:border-zinc-600 transition-colors"
           />
-          {searchQuery && (
+          {searchQuery ? (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 cursor-pointer"
             >
               <X size={12} />
             </button>
+          ) : (
+            <kbd className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] font-mono px-1 py-0.2 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-400 border border-zinc-200 dark:border-zinc-700 pointer-events-none">
+              ⌘K
+            </kbd>
           )}
         </div>
       </div>
 
-      {/* ─── GROUPED NAVIGATION SECTIONS ─── */}
-      <nav className="flex-1 overflow-y-auto px-2.5 py-2.5 space-y-3 text-xs overscroll-contain">
+      {/* ─── NAVIGATION TREE ─── */}
+      <nav className="flex-1 overflow-y-auto px-2.5 py-3 space-y-5 text-[13px] overscroll-contain">
         {filteredSections.length === 0 ? (
-          <div className="text-center py-8 px-4 text-slate-400">
-            <p className="text-xs mb-1">No matches found</p>
+          <div className="text-center py-10 px-4 text-zinc-400">
+            <p className="text-[13px] mb-2 font-normal">No results found for "{searchQuery}"</p>
             <button
               onClick={() => setSearchQuery('')}
-              className="text-[11px] font-semibold text-[#7C3AED] hover:underline cursor-pointer"
+              className="text-xs font-medium text-zinc-900 dark:text-zinc-200 hover:underline cursor-pointer"
             >
-              Reset filter
+              Clear filter
             </button>
           </div>
         ) : (
-          filteredSections.map((section) => {
-            const SectionIcon = section.icon;
-            const isCollapsed = !searchQuery && Boolean(collapsedSections[section.id]);
-
-            return (
-              <div key={section.id} className="space-y-0.5">
-                {/* Section Header */}
-                <button
-                  type="button"
-                  onClick={() => toggleSection(section.id)}
-                  className="w-full flex items-center justify-between px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-colors group cursor-pointer"
-                >
-                  <div className="flex items-center gap-1.5">
-                    <SectionIcon size={12} className="text-[#7C3AED] dark:text-purple-400" />
-                    <span>{section.title}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <span className="text-[9px] font-mono px-1 rounded bg-slate-200/70 dark:bg-slate-800/70 text-slate-600 dark:text-slate-400">
-                      {section.badge}
-                    </span>
-                    {!searchQuery && (
-                      <ChevronDown
-                        size={11}
-                        className={`transition-transform duration-200 ${isCollapsed ? '-rotate-90' : ''}`}
-                      />
-                    )}
-                  </div>
-                </button>
-
-                {/* Section Items */}
-                {!isCollapsed && (
-                  <ul className="space-y-1 pt-0.5">
-                    {section.items.map((item) => (
-                      <li key={item.path}>
-                        <NavLink
-                          to={item.path}
-                          onClick={() => isMobile && setIsMobileMenuOpen(false)}
-                          className={({ isActive }) =>
-                            `group flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-all no-underline ${
-                              isActive
-                                ? 'tab-3d-active font-semibold'
-                                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-200/50 dark:hover:bg-slate-800/40'
-                            }`
-                          }
-                        >
-                          {({ isActive }) => (
-                            <>
-                              <div className="flex items-center gap-2 truncate">
-                                {item.day ? (
-                                  <span
-                                    className={`shrink-0 font-mono text-[9px] font-bold px-1.5 py-0.5 rounded transition-colors ${
-                                      isActive
-                                        ? 'bg-black/25 text-white border border-white/25 shadow-inner'
-                                        : 'bg-slate-200/80 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 group-hover:bg-[#7C3AED]/15 group-hover:text-[#7C3AED]'
-                                    }`}
-                                  >
-                                    {item.day}
-                                  </span>
-                                ) : (
-                                  <span
-                                    className={`shrink-0 w-1.5 h-1.5 rounded-full ${
-                                      isActive ? 'bg-white shadow-xs' : 'bg-slate-300 dark:bg-slate-700 group-hover:bg-[#7C3AED]'
-                                    }`}
-                                  />
-                                )}
-                                <span className="truncate whitespace-nowrap">{item.label}</span>
-                              </div>
-
-                              <div className="flex items-center gap-1 shrink-0 ml-1">
-                                {item.isNew && (
-                                  <span className={`text-[8px] font-extrabold uppercase px-1 rounded ${
-                                    isActive 
-                                      ? 'bg-white/20 text-white border border-white/30' 
-                                      : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
-                                  }`}>
-                                    Live
-                                  </span>
-                                )}
-                                {isActive && (
-                                  <ChevronRight size={13} className="text-white shrink-0 drop-shadow-xs" />
-                                )}
-                              </div>
-                            </>
-                          )}
-                        </NavLink>
-                      </li>
-                    ))}
-                  </ul>
-                )}
+          filteredSections.map((section) => (
+            <div key={section.id}>
+              {/* Category Header */}
+              <div className="px-2.5 mb-1.5 text-[11px] font-semibold text-zinc-400 dark:text-zinc-500 tracking-wider uppercase">
+                {section.title}
               </div>
-            );
-          })
+
+              {/* Items List */}
+              <ul className="space-y-0.5">
+                {section.items.map((item) => (
+                  <li key={item.path}>
+                    <NavLink
+                      to={item.path}
+                      onClick={() => isMobile && setIsMobileMenuOpen(false)}
+                      className={({ isActive }) =>
+                        `group flex items-center justify-between px-2.5 py-1.5 rounded-md transition-colors no-underline font-medium text-[13px] leading-snug ${
+                          isActive
+                            ? 'bg-zinc-200/70 dark:bg-zinc-800 text-zinc-950 dark:text-white shadow-2xs border-l-2 border-zinc-900 dark:border-zinc-100 pl-2'
+                            : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-zinc-100 hover:bg-zinc-100/70 dark:hover:bg-zinc-900/60'
+                        }`
+                      }
+                    >
+                      {({ isActive }) => (
+                        <>
+                          <div className="flex items-center truncate">
+                            {item.day ? (
+                              <span
+                                className={`font-mono text-[11px] w-5 text-right shrink-0 mr-2.5 transition-colors ${
+                                  isActive
+                                    ? 'text-zinc-950 dark:text-zinc-100 font-semibold'
+                                    : 'text-zinc-400 dark:text-zinc-500 group-hover:text-zinc-600 dark:group-hover:text-zinc-300'
+                                }`}
+                              >
+                                {item.day}
+                              </span>
+                            ) : (
+                              <span
+                                className={`w-1.5 h-1.5 rounded-full shrink-0 mr-3 transition-colors ${
+                                  isActive
+                                    ? 'bg-zinc-900 dark:bg-zinc-100'
+                                    : 'bg-zinc-300 dark:bg-zinc-700 group-hover:bg-zinc-500'
+                                }`}
+                              />
+                            )}
+                            <span className="truncate whitespace-nowrap">{item.label}</span>
+                          </div>
+
+                          {isActive && (
+                            <ChevronRight size={13} className="text-zinc-500 dark:text-zinc-400 shrink-0 ml-1.5" />
+                          )}
+                        </>
+                      )}
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
         )}
       </nav>
 
-      {/* ─── BOTTOM PROGRESS FOOTER ─── */}
-      <div className="p-3 border-t border-slate-200 dark:border-slate-800/80 bg-white/40 dark:bg-[#0c0c0e]/80 shrink-0 space-y-2.5">
-        <div className="p-2 rounded-lg bg-slate-100 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800/80">
-          <div className="flex items-center justify-between text-[10px] mb-1">
-            <span className="font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1">
-              <Sparkles size={11} className="text-[#7C3AED]" />
-              Day 22 of 78
-            </span>
-            <span className="font-mono text-[10px] font-bold text-[#7C3AED]">
-              28.2%
-            </span>
-          </div>
-          <div className="w-full h-1 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
-            <div
-              className="h-full rounded-full bg-gradient-to-r from-[#7C3AED] to-purple-500 transition-all duration-500"
-              style={{ width: '28.2%' }}
-            />
-          </div>
+      {/* ─── FOOTER ─── */}
+      <div className="p-3.5 border-t border-zinc-200/80 dark:border-zinc-800/80 bg-white/40 dark:bg-zinc-950/40 shrink-0 space-y-2.5">
+        <div className="flex items-center justify-between text-[11px] font-medium text-zinc-500 dark:text-zinc-400">
+          <span>Day 22 of 78 Completed</span>
+          <span className="font-mono text-[11px] text-zinc-700 dark:text-zinc-300">28%</span>
+        </div>
+        <div className="w-full h-1 rounded-full bg-zinc-200 dark:bg-zinc-800 overflow-hidden">
+          <div
+            className="h-full rounded-full bg-zinc-800 dark:bg-zinc-200 transition-all duration-300"
+            style={{ width: '28.2%' }}
+          />
         </div>
 
-        <div className="flex items-center gap-2 text-[10px]">
+        <div className="pt-1 flex items-center justify-between text-xs font-medium text-zinc-500 dark:text-zinc-400">
           <a
             href="https://solitx.soumya.site"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 flex items-center justify-center gap-1 py-1 px-2 rounded-md border border-slate-200 dark:border-slate-800 hover:border-[#7C3AED] dark:hover:border-purple-500 text-slate-700 dark:text-slate-300 font-medium no-underline transition-colors"
+            className="flex items-center gap-1 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors no-underline"
           >
             <span>Live App</span>
-            <ExternalLink size={10} className="text-slate-400" />
+            <ExternalLink size={10} />
           </a>
+          <span className="text-zinc-300 dark:text-zinc-700">•</span>
           <a
             href="https://github.com/SoumyaranjanDS/SOLITX"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center p-1 rounded-md border border-slate-200 dark:border-slate-800 hover:border-[#7C3AED] dark:hover:border-purple-500 text-slate-700 dark:text-slate-300 no-underline transition-colors"
-            aria-label="GitHub Repository"
+            className="flex items-center gap-1 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors no-underline"
           >
-            <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
-            </svg>
+            <span>GitHub</span>
+            <ExternalLink size={10} />
           </a>
         </div>
       </div>
@@ -389,36 +318,36 @@ export default function Layout() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-white dark:bg-[#0a0a0a] transition-colors duration-200 font-sans">
+    <div className="min-h-screen flex flex-col md:flex-row bg-white dark:bg-[#09090b] transition-colors duration-200">
       {/* ─── MOBILE STICKY TOP NAVBAR ─── */}
-      <div className="md:hidden flex items-center justify-between px-4 h-14 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-[#09090b] sticky top-0 z-30">
+      <div className="md:hidden flex items-center justify-between px-4 h-14 border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#09090b] sticky top-0 z-30">
         <Link to="/" className="flex items-center gap-2 no-underline">
-          <div className="w-6 h-6 rounded-md bg-gradient-to-tr from-[#7C3AED] to-purple-500 flex items-center justify-center text-white">
-            <Zap size={13} className="fill-white" />
+          <div className="w-6 h-6 rounded-md bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 flex items-center justify-center font-bold text-xs">
+            S
           </div>
-          <span className="font-extrabold text-sm tracking-tight text-slate-900 dark:text-white">
+          <span className="font-semibold text-sm tracking-tight text-zinc-900 dark:text-white">
             SOLITX
           </span>
         </Link>
 
         {/* Current Active Chapter Tag on Mobile */}
         <div className="flex-1 px-3 truncate text-center">
-          <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate">
-            {currentItem.day ? `${currentItem.day}: ` : ''}{currentItem.label}
+          <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400 truncate">
+            {currentItem.day ? `${currentItem.day} · ` : ''}{currentItem.label}
           </span>
         </div>
 
         <div className="flex items-center gap-1.5">
           <button
             onClick={toggleTheme}
-            className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 cursor-pointer"
+            className="p-1.5 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 dark:text-zinc-400 cursor-pointer"
             aria-label="Toggle theme"
           >
             {isDarkMode ? <Sun size={15} /> : <Moon size={15} />}
           </button>
           <button
             onClick={() => setIsMobileMenuOpen(true)}
-            className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 cursor-pointer"
+            className="p-1.5 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 dark:text-zinc-400 cursor-pointer"
             aria-label="Open menu"
           >
             <Menu size={17} />
@@ -426,7 +355,7 @@ export default function Layout() {
         </div>
       </div>
 
-      {/* ─── MOBILE DRAWER & BACKDROP OVERLAY (SLIDE IN / SLIDE OUT) ─── */}
+      {/* ─── MOBILE DRAWER & BACKDROP OVERLAY ─── */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <div className="fixed inset-0 z-50 md:hidden flex">
@@ -448,7 +377,7 @@ export default function Layout() {
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 28, stiffness: 280 }}
-              className="relative z-10 w-72 max-w-[85vw] h-full shadow-2xl flex flex-col bg-[#f8fafc] dark:bg-[#09090b] border-r border-slate-200 dark:border-slate-800"
+              className="relative z-10 w-72 max-w-[85vw] h-full shadow-xl flex flex-col bg-[#fafafa] dark:bg-[#0c0c0e] border-r border-zinc-200 dark:border-zinc-800"
             >
               {renderSidebar(true)}
             </motion.div>
@@ -457,7 +386,7 @@ export default function Layout() {
       </AnimatePresence>
 
       {/* ─── DESKTOP SIDEBAR ─── */}
-      <aside className="hidden md:block w-64 border-r border-slate-200 dark:border-slate-800/80 shrink-0 sticky top-0 h-screen transition-colors duration-200">
+      <aside className="hidden md:block w-64 border-r border-zinc-200 dark:border-zinc-800/80 shrink-0 sticky top-0 h-screen transition-colors duration-200">
         {renderSidebar(false)}
       </aside>
 
@@ -468,17 +397,17 @@ export default function Layout() {
         </div>
 
         {/* Prev / Next Pagination Controls */}
-        <div className="mt-14 pt-8 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row gap-4 justify-between">
+        <div className="mt-14 pt-8 border-t border-zinc-200 dark:border-zinc-800 flex flex-col sm:flex-row gap-4 justify-between">
           {prevPage ? (
             <Link
               to={prevPage.path}
-              className="flex flex-col gap-1 group w-full sm:w-1/2 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-[#7C3AED] dark:hover:border-purple-500 no-underline transition-all bg-white dark:bg-[#0c0c0e] shadow-xs hover:shadow-sm"
+              className="flex flex-col gap-1 group w-full sm:w-1/2 p-3.5 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600 no-underline transition-colors bg-white dark:bg-[#0c0c0e]"
             >
-              <span className="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1 group-hover:text-[#7C3AED] transition-colors">
-                <ArrowLeft size={12} className="group-hover:-translate-x-1 transition-transform" />
+              <span className="text-[11px] font-medium text-zinc-400 dark:text-zinc-500 flex items-center gap-1 group-hover:text-zinc-900 dark:group-hover:text-zinc-200 transition-colors">
+                <ArrowLeft size={11} className="group-hover:-translate-x-1 transition-transform" />
                 Previous Chapter
               </span>
-              <span className="font-semibold text-xs sm:text-sm text-slate-900 dark:text-white truncate">
+              <span className="font-medium text-[13px] text-zinc-900 dark:text-white truncate">
                 {prevPage.label}
               </span>
             </Link>
@@ -489,13 +418,13 @@ export default function Layout() {
           {nextPage ? (
             <Link
               to={nextPage.path}
-              className="flex flex-col items-end text-right gap-1 group w-full sm:w-1/2 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-[#7C3AED] dark:hover:border-purple-500 no-underline transition-all bg-white dark:bg-[#0c0c0e] shadow-xs hover:shadow-sm"
+              className="flex flex-col items-end text-right gap-1 group w-full sm:w-1/2 p-3.5 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600 no-underline transition-colors bg-white dark:bg-[#0c0c0e]"
             >
-              <span className="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1 group-hover:text-[#7C3AED] transition-colors">
+              <span className="text-[11px] font-medium text-zinc-400 dark:text-zinc-500 flex items-center gap-1 group-hover:text-zinc-900 dark:group-hover:text-zinc-200 transition-colors">
                 Next Chapter
-                <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
+                <ArrowRight size={11} className="group-hover:translate-x-1 transition-transform" />
               </span>
-              <span className="font-semibold text-xs sm:text-sm text-slate-900 dark:text-white truncate">
+              <span className="font-medium text-[13px] text-zinc-900 dark:text-white truncate">
                 {nextPage.label}
               </span>
             </Link>
