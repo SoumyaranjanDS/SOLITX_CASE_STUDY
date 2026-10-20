@@ -54,6 +54,39 @@
   }
 }
 
+/* Solid 3D Tactile Tab Select Effect in Black */
+.tab-3d-black {
+  background: #18181b; /* Matte deep black / zinc-900 */
+  color: #ffffff !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid #09090b;
+  box-shadow: 0 3px 0 #09090b, 0 5px 12px -2px rgba(0, 0, 0, 0.25);
+  transform: translateY(-1px);
+  transition: all 0.12s ease;
+}
+
+.tab-3d-black:active {
+  transform: translateY(1.5px);
+  box-shadow: 0 1px 0 #09090b, 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.dark .tab-3d-black {
+  background: #1e1e24; /* Deep tactile graphite */
+  color: #ffffff !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.24);
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid #000000;
+  box-shadow: 0 3px 0 #000000, 0 6px 14px -2px rgba(0, 0, 0, 0.6);
+}
+
+.dark .tab-3d-black:active {
+  transform: translateY(1.5px);
+  box-shadow: 0 1px 0 #000000, 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
 /* Custom typography classes for documentation */
 .prose-container {
   @apply max-w-[700px];

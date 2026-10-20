@@ -233,10 +233,10 @@ export default function Layout() {
                       to={item.path}
                       onClick={() => isMobile && setIsMobileMenuOpen(false)}
                       className={({ isActive }) =>
-                        `group flex items-center justify-between px-2.5 py-1.5 rounded-md transition-colors no-underline font-medium text-[13px] leading-snug ${
+                        `group flex items-center justify-between px-2.5 py-1.5 rounded-md no-underline font-medium text-[13px] leading-snug transition-all ${
                           isActive
-                            ? 'bg-zinc-200/70 dark:bg-zinc-800 text-zinc-950 dark:text-white shadow-2xs border-l-2 border-zinc-900 dark:border-zinc-100 pl-2'
-                            : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-zinc-100 hover:bg-zinc-100/70 dark:hover:bg-zinc-900/60'
+                            ? 'tab-3d-black'
+                            : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-zinc-100 hover:bg-zinc-200/50 dark:hover:bg-zinc-800/60'
                         }`
                       }
                     >
@@ -247,7 +247,7 @@ export default function Layout() {
                               <span
                                 className={`font-mono text-[11px] w-5 text-right shrink-0 mr-2.5 transition-colors ${
                                   isActive
-                                    ? 'text-zinc-950 dark:text-zinc-100 font-semibold'
+                                    ? 'text-zinc-300 font-semibold'
                                     : 'text-zinc-400 dark:text-zinc-500 group-hover:text-zinc-600 dark:group-hover:text-zinc-300'
                                 }`}
                               >
@@ -257,16 +257,18 @@ export default function Layout() {
                               <span
                                 className={`w-1.5 h-1.5 rounded-full shrink-0 mr-3 transition-colors ${
                                   isActive
-                                    ? 'bg-zinc-900 dark:bg-zinc-100'
+                                    ? 'bg-white'
                                     : 'bg-zinc-300 dark:bg-zinc-700 group-hover:bg-zinc-500'
                                 }`}
                               />
                             )}
-                            <span className="truncate whitespace-nowrap">{item.label}</span>
+                            <span className={`truncate whitespace-nowrap ${isActive ? 'text-white' : ''}`}>
+                              {item.label}
+                            </span>
                           </div>
 
                           {isActive && (
-                            <ChevronRight size={13} className="text-zinc-500 dark:text-zinc-400 shrink-0 ml-1.5" />
+                            <ChevronRight size={13} className="text-zinc-400 shrink-0 ml-1.5" />
                           )}
                         </>
                       )}
