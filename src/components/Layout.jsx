@@ -63,6 +63,7 @@ const NAVIGATION_SECTIONS = [
       { path: '/day-19-server-bottleneck', label: 'Single Server Resource Ceiling', day: '19' },
       { path: '/day-21-connection-pooling', label: 'Pooled Connections Under Scale', day: '21' },
       { path: '/day-22-statelessness-audit', label: 'Statelessness & Fault Injection', day: '22' },
+      { path: '/day-23-scaling-experiment', label: 'Scaling Experiment (1 vs 2 vs 3)', day: '23' },
     ]
   }
 ];
@@ -284,13 +285,13 @@ export default function Layout() {
       {/* ─── FOOTER ─── */}
       <div className="p-3.5 border-t border-zinc-200/80 dark:border-zinc-800/80 bg-white/40 dark:bg-zinc-950/40 shrink-0 space-y-2.5">
         <div className="flex items-center justify-between text-[11px] font-medium text-zinc-500 dark:text-zinc-400">
-          <span>Day 22 of 78 Completed</span>
-          <span className="font-mono text-[11px] text-zinc-700 dark:text-zinc-300">28%</span>
+          <span>Day 23 of 78 Completed</span>
+          <span className="font-mono text-[11px] text-zinc-700 dark:text-zinc-300">29.5%</span>
         </div>
         <div className="w-full h-1 rounded-full bg-zinc-200 dark:bg-zinc-800 overflow-hidden">
           <div
             className="h-full rounded-full bg-zinc-800 dark:bg-zinc-200 transition-all duration-300"
-            style={{ width: '28.2%' }}
+            style={{ width: '29.5%' }}
           />
         </div>
 

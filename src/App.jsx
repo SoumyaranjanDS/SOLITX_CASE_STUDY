@@ -21,6 +21,7 @@ import Day18FeedPostLifecycle from './pages/Day18FeedPostLifecycle';
 import Day19ServerBottleneck from './pages/Day19ServerBottleneck';
 import Day21ConnectionPooling from './pages/Day21ConnectionPooling';
 import Day22StatelessnessAudit from './pages/Day22StatelessnessAudit';
+import Day23ScalingExperiment from './pages/Day23ScalingExperiment';
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
           <Route path="day-19-server-bottleneck" element={<Day19ServerBottleneck />} />
           <Route path="day-21-connection-pooling" element={<Day21ConnectionPooling />} />
           <Route path="day-22-statelessness-audit" element={<Day22StatelessnessAudit />} />
+          <Route path="day-23-scaling-experiment" element={<Day23ScalingExperiment />} />
         </Route>
       </Routes>
     </BrowserRouter>
