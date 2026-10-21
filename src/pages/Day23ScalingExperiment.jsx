@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   TrendingUp, 
   Server, 
@@ -26,7 +26,10 @@ import {
   Split,
   Sliders,
   BarChart3,
-  Scale
+  Scale,
+  BookOpen,
+  HelpCircle,
+  Search
 } from 'lucide-react';
 
 export default function Day23ScalingExperiment() {
@@ -58,6 +61,105 @@ export default function Day23ScalingExperiment() {
   };
 
   const currentUsl = calculateUsl(instanceCount, alpha, beta);
+
+  // System Design Glossary State
+  const [glossaryCategory, setGlossaryCategory] = useState('all');
+  const [glossarySearch, setGlossarySearch] = useState('');
+
+  const glossaryTerms = [
+    {
+      term: 'Throughput (RPS)',
+      category: 'metrics',
+      badge: 'Performance Metric',
+      formula: 'RPS = Completed Requests / Elapsed Seconds',
+      definition: 'The total volume of successful HTTP requests a system can process in one second. Unlike raw execution speed, throughput measures total system capacity under load.',
+      analogy: 'Think of cars passing through highway toll booths: even if each driver takes 2 seconds to pay, having 10 booths allows 5 cars per second to pass.',
+      solitxContext: 'In SOLITX: 1 Node delivers ~180 RPS; 2 Nodes jump to ~340 RPS (+88.5% gain). Beyond 6 nodes, throughput flatlines at ~840 RPS.'
+    },
+    {
+      term: 'Latency (P50, P95, P99 Percentiles)',
+      category: 'metrics',
+      badge: 'User Experience',
+      formula: 'P99 = 99% of requests faster than X ms',
+      definition: 'The time taken from when a user initiates a request until the server response finishes rendering. Percentiles (P50, P95, P99) are used because simple averages hide severe outlier delays.',
+      analogy: 'If 99 customers wait 50ms for food and 1 customer waits 15 minutes, the "average" is 140ms, but that 100th customer experienced a severe outage.',
+      solitxContext: 'In SOLITX: Median P50 latency is ~649ms; tail latency P99 under 100 concurrent requests is ~728ms.'
+    },
+    {
+      term: 'Concurrency',
+      category: 'metrics',
+      badge: 'Workload State',
+      formula: 'Concurrent In-Flight Requests at T(0)',
+      definition: 'The exact count of user requests being actively processed by application instances and the database at the same millisecond.',
+      analogy: 'Concurrency is the number of vehicles currently on a suspension bridge; Throughput is how many vehicles exit the bridge per minute.',
+      solitxContext: 'We stress-tested SOLITX across concurrency levels of 20, 50, and 100 simultaneous requests.'
+    },
+    {
+      term: 'Contention Parameter (α)',
+      category: 'laws',
+      badge: 'USL Factor (Serialization)',
+      formula: 'α = Serialization Fraction',
+      definition: 'The fraction of a transaction that cannot run in parallel and must wait in a sequential queue (such as acquiring database row locks or connection pool slots).',
+      analogy: 'No matter how many chefs work in a kitchen, if there is only 1 wood-fired oven, they must stand in a single line to bake.',
+      solitxContext: 'In SOLITX: α = 0.045, reflecting database connection limits and PostgreSQL transactional serialization queues.'
+    },
+    {
+      term: 'Coherency Crosstalk (β)',
+      category: 'laws',
+      badge: 'USL Factor (Coordination)',
+      formula: 'O(N²) Inter-Node Communication Tax',
+      definition: 'The coordination delay required for distributed nodes to synchronize shared state (e.g., Redis cache invalidations, reverse proxy health checks).',
+      analogy: 'A project with 2 developers takes 5 minutes to coordinate. A project with 20 developers spends 4 hours a day in meetings just agreeing on changes.',
+      solitxContext: 'In SOLITX: β = 0.008, modeling Redis cache invalidation broadcasts and NGINX upstream status health checking.'
+    },
+    {
+      term: "Amdahl's Law",
+      category: 'laws',
+      badge: 'Scalability Principle',
+      formula: 'Speedup = 1 / ((1 - P) + (P / N))',
+      definition: 'A law formulated by Gene Amdahl stating that the maximum speedup of a system is strictly limited by the sequential, non-parallelizable fraction of the workload.',
+      analogy: 'If 20% of your code must run on a single database, your theoretical speedup can never exceed 5x, even if you purchase 1,000 web servers.',
+      solitxContext: 'Explains why adding web servers alone cannot speed up database-heavy write transactions.'
+    },
+    {
+      term: 'Universal Scalability Law (USL)',
+      category: 'laws',
+      badge: 'Mathematical Model',
+      formula: 'C(N) = N / (1 + α(N - 1) + β·N(N - 1))',
+      definition: 'Dr. Neil Gunther’s enhancement of Amdahl’s Law that models both queuing contention (α) and cross-node communication coherency (β).',
+      analogy: 'Accounts for the real-world truth that workers not only wait in line, but also waste time arguing with each other as the team grows.',
+      solitxContext: 'Allows SOLITX engineers to calculate the exact optimal cluster size (2–3 nodes) before hardware expenditure is wasted.'
+    },
+    {
+      term: 'Retrograde Scaling',
+      category: 'failure-modes',
+      badge: 'System Failure',
+      formula: 'dC/dN < 0 (Negative Returns)',
+      definition: 'The counter-intuitive state where adding more servers actually decreases overall system throughput because communication overhead exceeds compute gains.',
+      analogy: 'Adding 50 cooks to a food truck causes them to bump into each other and drop ingredients, producing less food than 2 cooks.',
+      solitxContext: 'Beyond 12 nodes, Neon PostgreSQL connection limits and lock thrashing push the system into retrograde scaling.'
+    },
+    {
+      term: 'Hardware Scaling Efficiency',
+      category: 'metrics',
+      badge: 'Cost & Capacity ROI',
+      formula: 'Efficiency = (Actual Speedup / N) × 100%',
+      definition: 'The percentage of theoretical linear capacity delivered by each additional node added to the cluster.',
+      analogy: 'If hiring a 2nd employee doubles revenue, efficiency is 100%. If a 4th employee only adds 10% more revenue, efficiency drops significantly.',
+      solitxContext: 'In SOLITX: 2 Nodes = 94.3% efficiency (high ROI); 8 Nodes = 56.7% efficiency (diminishing returns).'
+    }
+  ];
+
+  const filteredGlossary = useMemo(() => {
+    return glossaryTerms.filter(item => {
+      const matchesCat = glossaryCategory === 'all' || item.category === glossaryCategory;
+      const matchesSearch = !glossarySearch.trim() || 
+        item.term.toLowerCase().includes(glossarySearch.toLowerCase()) ||
+        item.definition.toLowerCase().includes(glossarySearch.toLowerCase()) ||
+        item.solitxContext.toLowerCase().includes(glossarySearch.toLowerCase());
+      return matchesCat && matchesSearch;
+    });
+  }, [glossaryCategory, glossarySearch]);
 
   // Live Scaling Probe
   const runLiveScalingProbe = async () => {
@@ -382,6 +484,94 @@ export default function Day23ScalingExperiment() {
               </div>
               <div className="text-[11px] text-zinc-500 mt-0.5">Hardware Efficiency</div>
             </div>
+          </div>
+        </div>
+
+        {/* ─── CORE SYSTEM DESIGN GLOSSARY ─── */}
+        <div className="mt-8 pt-8 border-t border-zinc-200 dark:border-zinc-800">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+            <div>
+              <h3 className="font-bold text-zinc-900 dark:text-white text-base flex items-center gap-2">
+                <BookOpen size={17} className="text-zinc-700 dark:text-zinc-300" />
+                Core System Design Glossary: Essential Scaling Terminology
+              </h3>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+                Plain-English definitions, mathematical formulas, and real-world analogies for distributed systems concepts.
+              </p>
+            </div>
+
+            {/* Quick Search */}
+            <div className="relative w-full sm:w-64">
+              <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
+              <input
+                type="text"
+                value={glossarySearch}
+                onChange={(e) => setGlossarySearch(e.target.value)}
+                placeholder="Search definitions (e.g. Throughput, P99)..."
+                className="w-full text-xs pl-8 pr-3 py-1.5 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-400 dark:focus:border-zinc-600 transition-colors"
+              />
+            </div>
+          </div>
+
+          {/* Category Filter Pills */}
+          <div className="flex flex-wrap gap-1.5 mb-5">
+            {[
+              { id: 'all', label: `All Concepts (${glossaryTerms.length})` },
+              { id: 'metrics', label: 'Performance Metrics' },
+              { id: 'laws', label: 'Scaling Laws & USL' },
+              { id: 'failure-modes', label: 'Failure Modes' },
+            ].map(cat => (
+              <button
+                key={cat.id}
+                onClick={() => setGlossaryCategory(cat.id)}
+                className={`px-3 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${
+                  glossaryCategory === cat.id
+                    ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 shadow-2xs'
+                    : 'bg-zinc-100 dark:bg-zinc-800/80 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Glossary Card Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {filteredGlossary.map((item, idx) => (
+              <div
+                key={idx}
+                className="p-4 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-start justify-between gap-2 mb-2">
+                    <h4 className="font-bold text-zinc-900 dark:text-white text-sm">
+                      {item.term}
+                    </h4>
+                    <span className="shrink-0 text-[10px] font-mono font-medium px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700">
+                      {item.badge}
+                    </span>
+                  </div>
+
+                  <div className="font-mono text-[11px] text-zinc-500 dark:text-zinc-400 bg-zinc-50 dark:bg-zinc-800/50 px-2.5 py-1 rounded mb-2.5">
+                    {item.formula}
+                  </div>
+
+                  <p className="text-xs text-zinc-700 dark:text-zinc-300 leading-relaxed mb-3">
+                    {item.definition}
+                  </p>
+
+                  <div className="p-2.5 rounded-lg bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-200/80 dark:border-zinc-700/60 text-[11px] text-zinc-600 dark:text-zinc-400 leading-relaxed mb-2.5">
+                    <strong className="text-zinc-800 dark:text-zinc-200">Real-World Analogy: </strong>
+                    {item.analogy}
+                  </div>
+                </div>
+
+                <div className="text-[11px] text-emerald-700 dark:text-emerald-400 pt-2 border-t border-zinc-100 dark:border-zinc-800/80 leading-relaxed">
+                  <strong>In SOLITX: </strong>
+                  {item.solitxContext}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
