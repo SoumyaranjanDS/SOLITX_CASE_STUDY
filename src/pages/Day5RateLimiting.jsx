@@ -14,7 +14,7 @@ export default function Day5RateLimiting() {
         On Day 4, I built a highly secure, stateless authentication system using <code className="text-sm bg-slate-100 dark:bg-[#222] px-1.5 py-0.5 rounded">bcryptjs</code> to hash passwords. But that security created a massive vulnerability.
       </p>
 
-      <h2 className="prose-h2">The Problem: Event Loop Exhaustion</h2>
+      <h2 className="prose-h2">The Problem : Event Loop Exhaustion</h2>
       <p>
         <code>bcrypt</code> is intentionally designed to be mathematically "heavy" and slow to calculate. This makes it impossible for hackers to brute-force steal passwords if they ever hack the database.
       </p>
