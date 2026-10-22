@@ -74,6 +74,7 @@ const NAVIGATION_SECTIONS = [
       { path: '/day-25-background-jobs', label: 'Background Jobs & Queue', day: '25' },
       { path: '/day-26-notifications-queue', label: 'Notifications Queue & Events', day: '26' },
       { path: '/day-27-worker-failure-recovery', label: 'Failure in Jobs & DLQ', day: '27' },
+      { path: '/day-28-duplicate-messages', label: 'Duplicate Messages & Idempotency', day: '28' },
     ]
   }
 ];
@@ -295,13 +296,13 @@ export default function Layout() {
       {/* ─── FOOTER ─── */}
       <div className="p-3.5 border-t border-zinc-200/80 dark:border-zinc-800/80 bg-white/40 dark:bg-zinc-950/40 shrink-0 space-y-2.5">
         <div className="flex items-center justify-between text-[11px] font-medium text-zinc-500 dark:text-zinc-400">
-          <span>Day 27 of 78 Completed</span>
-          <span className="font-mono text-[11px] text-zinc-700 dark:text-zinc-300">34.6%</span>
+          <span>Day 28 of 78 Completed</span>
+          <span className="font-mono text-[11px] text-zinc-700 dark:text-zinc-300">35.9%</span>
         </div>
         <div className="w-full h-1 rounded-full bg-zinc-200 dark:bg-zinc-800 overflow-hidden">
           <div
             className="h-full rounded-full bg-zinc-800 dark:bg-zinc-200 transition-all duration-300"
-            style={{ width: '34.6%' }}
+            style={{ width: '35.9%' }}
           />
         </div>
 

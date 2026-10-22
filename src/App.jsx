@@ -26,6 +26,7 @@ import Day24SynchronousAudit from './pages/Day24SynchronousAudit';
 import Day25BackgroundJobs from './pages/Day25BackgroundJobs';
 import Day26NotificationsQueue from './pages/Day26NotificationsQueue';
 import Day27WorkerFailureRecovery from './pages/Day27WorkerFailureRecovery';
+import Day28DuplicateMessages from './pages/Day28DuplicateMessages';
 
 function App() {
   return (
@@ -58,6 +59,7 @@ function App() {
           <Route path="day-25-background-jobs" element={<Day25BackgroundJobs />} />
           <Route path="day-26-notifications-queue" element={<Day26NotificationsQueue />} />
           <Route path="day-27-worker-failure-recovery" element={<Day27WorkerFailureRecovery />} />
+          <Route path="day-28-duplicate-messages" element={<Day28DuplicateMessages />} />
         </Route>
       </Routes>
     </BrowserRouter>
