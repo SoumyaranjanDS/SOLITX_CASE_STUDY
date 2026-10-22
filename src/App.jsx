@@ -23,6 +23,7 @@ import Day21ConnectionPooling from './pages/Day21ConnectionPooling';
 import Day22StatelessnessAudit from './pages/Day22StatelessnessAudit';
 import Day23ScalingExperiment from './pages/Day23ScalingExperiment';
 import Day24SynchronousAudit from './pages/Day24SynchronousAudit';
+import Day25BackgroundJobs from './pages/Day25BackgroundJobs';
 
 function App() {
   return (
@@ -52,6 +53,7 @@ function App() {
           <Route path="day-22-statelessness-audit" element={<Day22StatelessnessAudit />} />
           <Route path="day-23-scaling-experiment" element={<Day23ScalingExperiment />} />
           <Route path="day-24-synchronous-audit" element={<Day24SynchronousAudit />} />
+          <Route path="day-25-background-jobs" element={<Day25BackgroundJobs />} />
         </Route>
       </Routes>
     </BrowserRouter>
