@@ -75,6 +75,7 @@ const NAVIGATION_SECTIONS = [
       { path: '/day-26-notifications-queue', label: 'Notifications Queue & Events', day: '26' },
       { path: '/day-27-worker-failure-recovery', label: 'Failure in Jobs & DLQ', day: '27' },
       { path: '/day-28-duplicate-messages', label: 'Duplicate Messages & Idempotency', day: '28' },
+      { path: '/day-28-media-pipeline-s3', label: 'Direct S3 Media Pipeline', day: 'S3' },
     ]
   }
 ];
