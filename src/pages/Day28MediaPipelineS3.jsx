@@ -10,6 +10,8 @@ import {
   Database, 
   Server, 
   ArrowRight, 
+  ArrowDown,
+  Smartphone,
   Clock, 
   Activity, 
   BarChart3, 
@@ -476,15 +478,88 @@ export default function Day28MediaPipelineS3() {
           <h2>Architecture Before: The Synchronous Multipart API Proxy Bottleneck</h2>
         </div>
 
-        <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-950 text-zinc-300 font-mono text-xs space-y-2 overflow-x-auto">
-          <div className="text-zinc-500">// BEFORE: MULTIPART UPLOAD CHOKES NODE.JS API SERVER & HEAP MEMORY</div>
-          <div className="text-rose-400">[User Device: 15MB Camera Photo]</div>
-          <div className="pl-8">│  HTTP POST /api/posts (multipart/form-data)</div>
-          <div className="pl-8">▼  Holds TCP socket open for 20+ seconds on 4G!</div>
-          <div className="text-amber-400">[Node.js API Server] ──Buffers in RAM / Disk (OOM Risk)──&gt; High CPU / Event Loop Stalled!</div>
-          <div className="pl-8">│  Re-uploads 15MB to S3 (Double Bandwidth Bill!)</div>
-          <div className="pl-8">▼</div>
-          <div className="text-zinc-400">[Raw S3 Bucket] ──Raw 15MB Photo Saved with Private GPS EXIF Leaks!──&gt; 💥</div>
+        {/* Visual Diagram: Synchronous Multipart Chokepoint */}
+        <div className="p-5 rounded-xl border border-red-500/20 bg-red-50/20 dark:bg-red-950/10 space-y-4">
+          <div className="text-xs font-semibold text-rose-600 dark:text-rose-400 uppercase tracking-wider flex items-center gap-1.5">
+            <Flame size={14} /> Synchronous Media Upload Flaw: Single-Threaded API Proxy
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-center">
+            {/* Node 1: Client */}
+            <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 space-y-2 text-center md:text-left">
+              <div className="flex items-center justify-center md:justify-start gap-2 text-zinc-900 dark:text-zinc-100 font-bold text-sm">
+                <div className="p-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300">
+                  <Smartphone size={16} />
+                </div>
+                <span>1. Mobile Client / Browser</span>
+              </div>
+              <p className="text-xs text-zinc-600 dark:text-zinc-400">
+                User selects uncompressed 15MB camera photo.
+              </p>
+              <div className="flex flex-wrap gap-1">
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">multipart/form-data</span>
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-rose-500/10 text-rose-600 dark:text-rose-400">15MB Stream</span>
+              </div>
+            </div>
+
+            {/* Connecting Arrow 1 */}
+            <div className="flex flex-col items-center justify-center text-center px-1">
+              <div className="hidden md:flex items-center text-rose-500 dark:text-rose-400">
+                <ArrowRight size={20} className="animate-pulse" />
+              </div>
+              <div className="md:hidden text-rose-500 dark:text-rose-400">
+                <ArrowDown size={20} className="animate-pulse" />
+              </div>
+              <span className="text-[10px] font-medium text-rose-600 dark:text-rose-400 mt-1 leading-tight">
+                20s+ Socket Lock on 4G
+              </span>
+            </div>
+
+            {/* Node 2: Node.js API Proxy */}
+            <div className="p-4 rounded-xl border border-rose-500/40 bg-rose-500/5 space-y-2 text-center md:text-left">
+              <div className="flex items-center justify-center md:justify-start gap-2 text-rose-600 dark:text-rose-400 font-bold text-sm">
+                <div className="p-1.5 rounded-lg bg-rose-500/10 text-rose-600 dark:text-rose-400">
+                  <Server size={16} />
+                </div>
+                <span>2. Node.js API Server</span>
+              </div>
+              <p className="text-xs text-zinc-600 dark:text-zinc-400">
+                Buffers 15MB into heap RAM or local disk. 
+              </p>
+              <div className="flex flex-wrap gap-1">
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-rose-500/20 text-rose-700 dark:text-rose-300 font-semibold">Event Loop Stalled</span>
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-amber-500/20 text-amber-700 dark:text-amber-300 font-semibold">OOM Hazard</span>
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-rose-500/20 text-rose-700 dark:text-rose-300 font-semibold">Double Bandwidth Bill</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Second Row Connector & Storage Node */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-center pt-1">
+            <div className="md:col-span-2 p-3 rounded-lg border border-rose-500/20 bg-white/60 dark:bg-zinc-900/60 text-xs text-zinc-600 dark:text-zinc-400 space-y-1">
+              <strong className="text-rose-600 dark:text-rose-400">Why It Collapsed Under Load:</strong>
+              <p className="text-[11px] leading-relaxed">
+                Node.js is single-threaded. While streaming multi-megabyte payloads through multer, the event loop cannot service fast JSON requests (like logins or feed scrolls). A thundering herd of 50 simultaneous photo uploads crashed the worker cluster.
+              </p>
+            </div>
+
+            {/* Node 3: Raw S3 */}
+            <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 space-y-2 text-center md:text-left">
+              <div className="flex items-center justify-center md:justify-start gap-2 text-zinc-900 dark:text-zinc-100 font-bold text-sm">
+                <div className="p-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300">
+                  <HardDrive size={16} />
+                </div>
+                <span>3. Raw S3 Storage</span>
+              </div>
+              <p className="text-xs text-zinc-600 dark:text-zinc-400">
+                Bloated 15MB file stored with unencrypted camera metadata.
+              </p>
+              <div className="flex flex-wrap gap-1">
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-rose-500/10 text-rose-600 dark:text-rose-400">EXIF GPS Leaked</span>
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-zinc-100 dark:bg-zinc-800 text-zinc-500">120MB per 10 posts</span>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -495,24 +570,164 @@ export default function Day28MediaPipelineS3() {
           <h2>Architecture After: Direct-to-S3 Presigned URLs & Sharp Worker Pipeline</h2>
         </div>
 
-        <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-950 text-zinc-300 font-mono text-xs space-y-2 overflow-x-auto">
-          <div className="text-zinc-500">// AFTER: COMPLETE DECOUPLING OF BANDWIDTH FROM COMPUTE (DIRECTIONAL FLOW)</div>
-          <div className="text-emerald-400">[User / Browser] ──── (1) Request Presigned URL (&lt; 2ms) ────&gt; [Node.js API Server]</div>
-          <div className="text-emerald-400">[User / Browser] &lt;─── (2) Returns Signed PUT URL (&lt; 240 bytes) ── [Node.js API Server]</div>
-          <div className="text-indigo-400">[User / Browser] ──── (3) DIRECT HTTP PUT (12MB binary) ───────────────────────&gt; [AWS S3: raw/]</div>
-          <div className="text-zinc-500">                                                                                      │</div>
-          <div className="text-purple-400">[Worker Pool] ◄─── (4) Enqueue 'media_processing' ── [Redis Job Queue] ◄──────────────┘</div>
-          <div className="text-purple-400">[Worker Pool (Sharp)]</div>
-          <div className="pl-8">├── (A) Decompression Bomb Verification (&lt; 25MP)</div>
-          <div className="pl-8">├── (B) EXIF Metadata Stripping (GPS Latitude/Longitude Permanently Cleared)</div>
-          <div className="pl-8">└── (C) Generates 3 Responsive WebP Variants:</div>
-          <div className="pl-16">├── Thumbnail (150x150 WebP ~ 15KB)</div>
-          <div className="pl-16">├── Feed Timeline (600px WebP ~ 120KB)</div>
-          <div className="pl-16">└── Full Expanded (1200px WebP ~ 340KB)</div>
-          <div className="pl-8">│</div>
-          <div className="pl-8">▼</div>
-          <div className="text-emerald-400">[AWS S3: optimized/] ◄── Writes 3 Variants with 1-Year Immutable Cache ──── [Worker Pool]</div>
-          <div className="text-emerald-400">[Neon PostgreSQL]    ◄── Sets Status = 'ready', URLs saved ─────────────── [Worker Pool]</div>
+        {/* Visual Diagram: Decoupled Direct-to-S3 Architecture */}
+        <div className="p-5 rounded-xl border border-emerald-500/20 bg-emerald-50/20 dark:bg-emerald-950/10 space-y-6">
+          <div className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
+            <CheckCircle2 size={14} /> Production Architecture: Decoupled Bandwidth from Compute
+          </div>
+
+          {/* Phase 1: Zero-Load Authorization Grant */}
+          <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm space-y-3">
+            <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-2">
+              <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+                <span className="w-5 h-5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-[10px]">1</span>
+                Phase 1: Zero-Load Authorization Ticket Grant (&lt; 2ms)
+              </span>
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-medium">
+                API Bandwidth: 0.0 MB
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-center">
+              <div className="p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950/60 text-xs space-y-1">
+                <div className="font-semibold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+                  <Smartphone size={14} className="text-zinc-500" /> Client Device
+                </div>
+                <div className="text-[11px] text-zinc-500">Sends lightweight metadata JSON:</div>
+                <code className="text-[10px] font-mono bg-white dark:bg-zinc-900 px-1 py-0.5 rounded text-zinc-700 dark:text-zinc-300 block">
+                  POST /media/upload-url (240B)
+                </code>
+              </div>
+
+              <div className="flex flex-col items-center justify-center text-center px-1">
+                <div className="flex items-center gap-1 text-emerald-500">
+                  <ArrowRight size={16} />
+                  <span className="text-[10px] font-mono text-zinc-400">Signed Ticket</span>
+                  <ArrowRight size={16} />
+                </div>
+                <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium mt-0.5">Cryptographic HMAC-SHA256</span>
+              </div>
+
+              <div className="p-3 rounded-lg border border-emerald-500/30 bg-emerald-50/10 dark:bg-emerald-950/10 text-xs space-y-1">
+                <div className="font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                  <Server size={14} /> Node.js API Server
+                </div>
+                <div className="text-[11px] text-zinc-500">Issues 5-minute Presigned PUT URL.</div>
+                <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono font-medium">
+                  DB record initialized: status='pending'
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Phase 2: Direct Binary Stream to S3 */}
+          <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm space-y-3">
+            <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-2">
+              <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+                <span className="w-5 h-5 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-[10px]">2</span>
+                Phase 2: Direct Client-to-S3 Binary Streaming (Zero API Load)
+              </span>
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-medium">
+                Infinitely Scalable S3 Ingestion
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-center">
+              <div className="p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950/60 text-xs space-y-1">
+                <div className="font-semibold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+                  <Smartphone size={14} className="text-zinc-500" /> Client Device
+                </div>
+                <div className="text-[11px] text-zinc-500">Streams raw 15MB binary via HTTP PUT.</div>
+                <div className="text-[10px] text-indigo-600 dark:text-indigo-400 font-medium">Bypasses API server 100%</div>
+              </div>
+
+              <div className="flex flex-col items-center justify-center text-center px-1">
+                <div className="text-indigo-500">
+                  <ArrowRight size={20} className="animate-pulse" />
+                </div>
+                <span className="text-[10px] text-indigo-600 dark:text-indigo-400 font-medium mt-0.5">
+                  Direct S3 PUT Stream
+                </span>
+              </div>
+
+              <div className="p-3 rounded-lg border border-indigo-500/30 bg-indigo-50/10 dark:bg-indigo-950/10 text-xs space-y-1">
+                <div className="font-semibold text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5">
+                  <HardDrive size={14} /> AWS S3: raw/ Bucket
+                </div>
+                <div className="text-[11px] text-zinc-500">Temporarily stores master original.</div>
+                <div className="text-[10px] text-zinc-400">AWS Lifecycle auto-deletes unlinked files after 24h</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Phase 3: Asynchronous Sharp Worker Engine */}
+          <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm space-y-3">
+            <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-2">
+              <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+                <span className="w-5 h-5 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center text-[10px]">3</span>
+                Phase 3: Asynchronous Worker Optimization & Security Engine
+              </span>
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-purple-500/10 text-purple-600 dark:text-purple-400 font-medium">
+                Latency: 829.7 ms
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {/* Task A: Decomp Bomb */}
+              <div className="p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950/60 space-y-1 text-xs">
+                <div className="font-semibold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+                  <ShieldCheck size={14} className="text-emerald-500" /> Decomp Bomb Guard
+                </div>
+                <p className="text-[11px] text-zinc-500">
+                  Inspects dimensions before memory allocation. Rejects images &gt; 25 Megapixels.
+                </p>
+                <span className="inline-block text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-medium">OOM Immunity</span>
+              </div>
+
+              {/* Task B: EXIF Stripping */}
+              <div className="p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950/60 space-y-1 text-xs">
+                <div className="font-semibold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+                  <EyeOff size={14} className="text-rose-500" /> EXIF GPS Scrubber
+                </div>
+                <p className="text-[11px] text-zinc-500">
+                  Wipes embedded GPS latitude/longitude, phone serials, and timestamps.
+                </p>
+                <span className="inline-block text-[10px] font-mono text-rose-600 dark:text-rose-400 font-medium">100% Privacy Anonymized</span>
+              </div>
+
+              {/* Task C: Responsive WebP */}
+              <div className="p-3 rounded-lg border border-purple-500/30 bg-purple-50/10 dark:bg-purple-950/10 space-y-1 text-xs">
+                <div className="font-semibold text-purple-600 dark:text-purple-400 flex items-center gap-1.5">
+                  <Minimize2 size={14} /> 3 Responsive Variants
+                </div>
+                <p className="text-[11px] text-zinc-500">
+                  Thumb (150px WebP ~15KB), Feed (600px ~120KB), Full (1200px ~340KB).
+                </p>
+                <span className="inline-block text-[10px] font-mono text-purple-600 dark:text-purple-400 font-bold">97.2% Bandwidth Saved</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Phase 4: Two-Phase Commit & Public Storage */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="p-3.5 rounded-xl border border-emerald-500/30 bg-white dark:bg-zinc-900 space-y-1 text-xs">
+              <div className="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                <HardDrive size={15} /> AWS S3: optimized/ Bucket
+              </div>
+              <p className="text-[11px] text-zinc-600 dark:text-zinc-400">
+                Uploaded with 1-Year Immutable Cache headers (<code className="font-mono text-[10px]">max-age=31536000</code>).
+              </p>
+            </div>
+
+            <div className="p-3.5 rounded-xl border border-emerald-500/30 bg-white dark:bg-zinc-900 space-y-1 text-xs">
+              <div className="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                <Database size={15} /> Neon PostgreSQL Two-Phase Commit
+              </div>
+              <p className="text-[11px] text-zinc-600 dark:text-zinc-400">
+                Media transitions from <code className="font-mono text-[10px]">pending</code> &rarr; <code className="font-mono text-[10px] text-emerald-600 font-bold">ready</code> with public CDN URLs saved.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
