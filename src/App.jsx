@@ -28,6 +28,7 @@ import Day26NotificationsQueue from './pages/Day26NotificationsQueue';
 import Day27WorkerFailureRecovery from './pages/Day27WorkerFailureRecovery';
 import Day28DuplicateMessages from './pages/Day28DuplicateMessages';
 import Day28MediaPipelineS3 from './pages/Day28MediaPipelineS3';
+import Day29CloudFrontCDN from './pages/Day29CloudFrontCDN';
 
 function App() {
   return (
@@ -62,6 +63,7 @@ function App() {
           <Route path="day-27-worker-failure-recovery" element={<Day27WorkerFailureRecovery />} />
           <Route path="day-28-duplicate-messages" element={<Day28DuplicateMessages />} />
           <Route path="day-28-media-pipeline-s3" element={<Day28MediaPipelineS3 />} />
+          <Route path="day-29-cloudfront-cdn" element={<Day29CloudFrontCDN />} />
         </Route>
       </Routes>
     </BrowserRouter>
